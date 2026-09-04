@@ -1,6 +1,6 @@
 {% set name = "foxes" %}
 {% set version = "1.9.0" %}
-{% set python_min = "3.9" %}
+{% set python_min = "3.10" %}
 
 package:
   name: {{ name|lower }}
@@ -15,36 +15,57 @@ build:
   script: {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
   number: 0
   entry_points:
-    - foxes_yaml = foxes.input.yaml.yaml:foxes_yaml
-    - foxes_windio = foxes.input.yaml.windio.windio:foxes_windio
+    - foxes_yaml = foxes.input.yaml.yaml:main
+    - foxes_windio = foxes.input.yaml.windio.windio:main
+    - foxes_create_mean_dataset = foxes.input.states.create.dataset_mean:main
+    - wrf2foxes = foxes.input.states.create.wrf2foxes:main
+    - era52foxes = foxes.input.states.create.era52foxes:main
+    - iconDream2foxes = foxes.input.states.create.icon_dream:main
+    - eww2foxes = foxes.input.farm_layout.from_eww:main
+    - foxes_create_gaussian_lookup = foxes.utils.create_gaussian_lookup:main
 
 requirements:
   host:
     - python {{ python_min }}
     - pip
-    - setuptools >=61
+    - setuptools >=84
+
   run:
-    - python >={{ python_min }}
+    - python >=3.10,<3.14
     - matplotlib-base >=3.8
     - numpy >=1.26
     - pandas >=2.0
-    - xarray >=2023
-    - netcdf4 >=1.0
     - scipy >=1.12
-    - pyyaml >=4.0
-    - cycler >=0.10
-    - tqdm >=2.0
+    - xarray >=2023
+    - netcdf4 >=1.6
+    - h5netcdf >=1.8.1
+    - h5py >=3.11.0
+    - pyyaml >=6.0
+    - tqdm >=4.31.1
     - utm >=0.5
 
 test:
   imports:
     - foxes
+
   requires:
     - python {{ python_min }}
     - pip
     - pytest >=7.0
+    - nbmake >=1.0
+    - pre-commit >=3.0
+    - mypy >=1.11.0
+    - mypy !=2.3.1
+    - multiprocess >=0.70.17
+    - jupyterlab >=4.6.3
+    - mistune >=3.3.4
+    - nbconvert >=7.17.1
+    - pillow >=12.3.0
+    - tornado >=6.5.8
+
   source_files:
     - tests
+
   commands:
     - pip check
     - pytest tests
