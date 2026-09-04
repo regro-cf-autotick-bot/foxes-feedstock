@@ -31,7 +31,7 @@ requirements:
     - setuptools >=84
 
   run:
-    - python >=3.10,<3.14
+    - python >={{ python_min }}
     - matplotlib-base >=3.8
     - numpy >=1.26
     - pandas >=2.0
